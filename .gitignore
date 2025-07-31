@@ -31,16 +31,23 @@ invoiceninja/storage/framework/sessions/*
 invoiceninja/storage/framework/testing/*
 invoiceninja/storage/framework/views/*
 invoiceninja/storage/logs/*
+# Preserve directory structure
+!invoiceninja/storage/
+!invoiceninja/storage/app/
 !invoiceninja/storage/app/public/
-!invoiceninja/storage/framework/cache/.gitkeep
-!invoiceninja/storage/framework/sessions/.gitkeep
-!invoiceninja/storage/framework/testing/.gitkeep
-!invoiceninja/storage/framework/views/.gitkeep
-!invoiceninja/storage/logs/.gitkeep
+!invoiceninja/storage/framework/
+!invoiceninja/storage/framework/cache/
+!invoiceninja/storage/framework/sessions/
+!invoiceninja/storage/framework/testing/
+!invoiceninja/storage/framework/views/
+!invoiceninja/storage/logs/
+!invoiceninja/storage/**/.gitignore
 
 # Build artifacts
 invoiceninja/bootstrap/cache/*
-!invoiceninja/bootstrap/cache/.gitkeep
+!invoiceninja/bootstrap/
+!invoiceninja/bootstrap/cache/
+!invoiceninja/bootstrap/cache/.gitignore
 invoiceninja/public/build/
 invoiceninja/public/mix-manifest.json
 invoiceninja/public/css/

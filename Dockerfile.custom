@@ -64,7 +64,9 @@ RUN ls -la && \
     test -f composer.json || (echo "ERROR: composer.json not found!" && exit 1)
 
 # Ensure storage directories exist and have correct permissions
-RUN chmod -R 775 storage bootstrap/cache \
+# Create them if they don't exist (in case .gitignore excluded them)
+RUN mkdir -p storage/app/public storage/framework/{cache,sessions,testing,views} storage/logs bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
 # Install dependencies (without dev dependencies for production)
