@@ -1,0 +1,100 @@
+# Environment files
+.env
+.env.*
+!.env.example
+!.env.custom
+
+# Docker volumes and data
+mysql_data/
+redis_data/
+app_public/
+app_storage/
+
+# IDE and OS files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Invoice Ninja specific
+invoiceninja/vendor/
+invoiceninja/node_modules/
+invoiceninja/public/hot
+invoiceninja/public/storage
+invoiceninja/storage/*.key
+invoiceninja/storage/app/*
+invoiceninja/storage/framework/cache/*
+invoiceninja/storage/framework/sessions/*
+invoiceninja/storage/framework/testing/*
+invoiceninja/storage/framework/views/*
+invoiceninja/storage/logs/*
+!invoiceninja/storage/app/public/
+!invoiceninja/storage/framework/cache/.gitkeep
+!invoiceninja/storage/framework/sessions/.gitkeep
+!invoiceninja/storage/framework/testing/.gitkeep
+!invoiceninja/storage/framework/views/.gitkeep
+!invoiceninja/storage/logs/.gitkeep
+
+# Build artifacts
+invoiceninja/bootstrap/cache/*
+!invoiceninja/bootstrap/cache/.gitkeep
+invoiceninja/public/build/
+invoiceninja/public/mix-manifest.json
+invoiceninja/public/css/
+invoiceninja/public/js/
+invoiceninja/public/vendor/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Test files
+invoiceninja/.phpunit.result.cache
+invoiceninja/phpunit.xml
+invoiceninja/.php_cs.cache
+invoiceninja/.php-cs-fixer.cache
+
+# Composer
+composer.phar
+
+# Backup files
+*.bak
+*.backup
+*.old
+
+# Temporary files
+*.tmp
+*.temp
+.~lock.*
+
+# Docker specific
+docker-compose.override.yml
+.dockerignore
+
+# Git merge files
+*.orig
+
+# Coverage reports
+coverage/
+*.clover
+
+# NPM/Yarn
+package-lock.json
+yarn.lock
+
+# Sensitive data
+*.pem
+*.key
+*.crt
+*.p12
+secrets/
+
+# Custom notes (keep private)
+NOTES.md
+TODO.md
+private/
