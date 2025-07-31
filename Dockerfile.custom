@@ -63,18 +63,18 @@ WORKDIR /var/www/html
 RUN ls -la && \
     test -f composer.json || (echo "ERROR: composer.json not found!" && exit 1)
 
-# Create necessary directories BEFORE composer install to avoid cache path error
-RUN mkdir -p storage/framework/{sessions,views,cache} \
-    && mkdir -p storage/logs \
-    && mkdir -p bootstrap/cache \
-    && chmod -R 775 storage bootstrap/cache \
+# Ensure storage directories exist and have correct permissions
+RUN chmod -R 775 storage bootstrap/cache \
     && chown -R www-data:www-data storage bootstrap/cache
 
 # Install dependencies (without dev dependencies for production)
 # Move preload.php temporarily to avoid autoload error
+# Run composer with proper environment to avoid cache issues
+ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN if [ -f preload.php ]; then mv preload.php preload.php.bak; fi && \
-    composer install --no-dev --optimize-autoloader --no-interaction && \
-    if [ -f preload.php.bak ]; then mv preload.php.bak preload.php; fi
+    composer install --no-dev --optimize-autoloader --no-interaction --no-scripts && \
+    if [ -f preload.php.bak ]; then mv preload.php.bak preload.php; fi && \
+    composer dump-autoload --optimize
 
 # Configure PHP
 RUN ln -s "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
@@ -92,6 +92,9 @@ RUN mkdir -p public/storage \
     && find /var/www/html -type f -exec chmod 644 {} \; \
     && find /var/www/html -type d -exec chmod 755 {} \; \
     && chmod -R 775 storage bootstrap/cache
+
+# Run Laravel post-install scripts
+RUN php artisan package:discover --ansi
 
 # Create storage link
 RUN php artisan storage:link
