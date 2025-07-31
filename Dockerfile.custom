@@ -63,6 +63,13 @@ WORKDIR /var/www/html
 RUN ls -la && \
     test -f composer.json || (echo "ERROR: composer.json not found!" && exit 1)
 
+# Create necessary directories BEFORE composer install to avoid cache path error
+RUN mkdir -p storage/framework/{sessions,views,cache} \
+    && mkdir -p storage/logs \
+    && mkdir -p bootstrap/cache \
+    && chmod -R 775 storage bootstrap/cache \
+    && chown -R www-data:www-data storage bootstrap/cache
+
 # Install dependencies (without dev dependencies for production)
 # Move preload.php temporarily to avoid autoload error
 RUN if [ -f preload.php ]; then mv preload.php preload.php.bak; fi && \
@@ -79,11 +86,8 @@ COPY dockerfiles/debian/php/php-fpm.conf /usr/local/etc/php-fpm.d/invoiceninja.c
 # Setup supervisor
 COPY dockerfiles/debian/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Create necessary directories and set permissions
-RUN mkdir -p storage/framework/{sessions,views,cache} \
-    && mkdir -p storage/logs \
-    && mkdir -p bootstrap/cache \
-    && mkdir -p public/storage \
+# Set final permissions and create remaining directories
+RUN mkdir -p public/storage \
     && chown -R www-data:www-data /var/www/html \
     && find /var/www/html -type f -exec chmod 644 {} \; \
     && find /var/www/html -type d -exec chmod 755 {} \; \
