@@ -79,7 +79,7 @@ ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN if [ -f preload.php ]; then mv preload.php preload.php.bak; fi && \
     composer install --no-dev --optimize-autoloader --no-interaction --no-scripts && \
     if [ -f preload.php.bak ]; then mv preload.php.bak preload.php; fi && \
-    composer dump-autoload --optimize
+    composer dump-autoload --optimize --no-scripts
 
 # Build Vite assets for the client portal
 RUN npm install && \
