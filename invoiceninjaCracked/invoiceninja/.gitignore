@@ -1,7 +1,7 @@
 /node_modules
 /public/hot
 /public/storage
-/public/react
+# /public/react  # Commented out - we need React UI assets
 /storage/*.key
 /storage/debugbar
 /storage/*
