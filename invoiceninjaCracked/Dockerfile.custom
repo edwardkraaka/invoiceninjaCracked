@@ -104,15 +104,10 @@ RUN mkdir -p public/storage \
     && find /var/www/html -type d -exec chmod 755 {} \; \
     && chmod -R 775 storage bootstrap/cache
 
-# Run Laravel post-install scripts
-# Ensure storage directories exist with correct permissions before artisan commands
-RUN mkdir -p storage/framework/{cache,cache/data,sessions,testing,views} storage/app/public storage/logs bootstrap/cache && \
-    chmod -R 775 storage bootstrap/cache && \
-    chown -R www-data:www-data storage bootstrap/cache && \
-    php artisan package:discover --ansi
-
-# Create storage link
-RUN php artisan storage:link
+# Skip Laravel post-install scripts during build - they will run at container startup
+# when the actual .env file is mounted
+# RUN php artisan package:discover --ansi
+# RUN php artisan storage:link
 
 # Copy initialization script
 COPY dockerfiles/debian/scripts/init-custom.sh /usr/local/bin/init.sh
