@@ -1,0 +1,41 @@
+250818 16:49:19 mysqld_safe Starting mariadbd daemon with databases from /config/databases
+2025-08-18 16:49:19 0 [Note] /usr/bin/mariadbd (server 10.6.10-MariaDB-log) starting as process 325 ...
+2025-08-18 16:49:19 0 [Warning] Setting lower_case_table_names=2 because file system for /config/databases/ is case insensitive
+2025-08-18 16:49:19 0 [Note] InnoDB: Compressed tables use zlib 1.2.12
+2025-08-18 16:49:19 0 [Note] InnoDB: Number of pools: 1
+2025-08-18 16:49:19 0 [Note] InnoDB: Using ARMv8 crc32 + pmull instructions
+2025-08-18 16:49:19 0 [Note] InnoDB: Using Linux native AIO
+2025-08-18 16:49:19 0 [Note] InnoDB: Initializing buffer pool, total size = 268435456, chunk size = 134217728
+2025-08-18 16:49:19 0 [Note] InnoDB: Completed initialization of buffer pool
+2025-08-18 16:49:19 0 [Note] InnoDB: 128 rollback segments are active.
+2025-08-18 16:49:19 0 [Note] InnoDB: Creating shared tablespace for temporary tables
+2025-08-18 16:49:19 0 [Note] InnoDB: Setting file './ibtmp1' size to 12 MB. Physically writing the file full; Please wait ...
+2025-08-18 16:49:19 0 [Note] InnoDB: File './ibtmp1' size is now 12 MB.
+2025-08-18 16:49:19 0 [Note] InnoDB: 10.6.10 started; log sequence number 11713804; transaction id 11503
+2025-08-18 16:49:19 0 [Note] Plugin 'FEEDBACK' is disabled.
+2025-08-18 16:49:19 0 [Note] InnoDB: Loading buffer pool(s) from /config/databases/ib_buffer_pool
+2025-08-18 16:49:19 0 [Note] Server socket created on IP: '0.0.0.0'.
+2025-08-18 16:49:19 0 [Note] Server socket created on IP: '::'.
+2025-08-18 16:49:19 0 [Note] /usr/bin/mariadbd: ready for connections.
+Version: '10.6.10-MariaDB-log'  socket: '/run/mysqld/mysqld.sock'  port: 3306  MariaDB Server
+2025-08-18 16:49:19 0 [Note] InnoDB: Buffer pool(s) load completed at 250818 16:49:19
+2025-08-18 16:49:20 4 [Warning] Aborted connection 4 to db: 'unconnected' user: 'unauthenticated' host: 'localhost' (This connection closed normally without authentication)
+2025-08-18 17:02:06 112 [Warning] Aborted connection 112 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got an error reading communication packets)
+2025-08-18 17:02:06 111 [Warning] Aborted connection 111 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got an error reading communication packets)
+2025-08-18 17:13:11 173 [Warning] Aborted connection 173 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got timeout reading communication packets)
+2025-08-18 17:20:03 300 [Warning] Aborted connection 300 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got timeout reading communication packets)
+2025-08-18 19:41:09 466 [Warning] Aborted connection 466 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got timeout reading communication packets)
+2025-08-18 19:45:19 518 [Warning] Aborted connection 518 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got timeout reading communication packets)
+2025-08-18 19:55:32 585 [Warning] Aborted connection 585 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got timeout reading communication packets)
+2025-08-18 20:10:01 829 [Warning] Aborted connection 829 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got timeout reading communication packets)
+2025-08-18 20:10:01 939 [Warning] Aborted connection 939 to db: 'invoiceninja' user: 'invoiceninja' host: 'invoiceninja.invoiceninja_invoiceninja-network' (Got timeout reading communication packets)
+2025-08-18 20:16:44 0 [Note] /usr/bin/mariadbd (initiated by: unknown): Normal shutdown
+2025-08-18 20:16:44 0 [Note] InnoDB: FTS optimize thread exiting.
+2025-08-18 20:16:44 0 [Note] InnoDB: Starting shutdown...
+2025-08-18 20:16:44 0 [Note] InnoDB: Dumping buffer pool(s) to /config/databases/ib_buffer_pool
+2025-08-18 20:16:44 0 [Note] InnoDB: Buffer pool(s) dump completed at 250818 20:16:44
+2025-08-18 20:16:44 0 [Note] InnoDB: Removed temporary tablespace data file: "./ibtmp1"
+2025-08-18 20:16:44 0 [Note] InnoDB: Shutdown completed; log sequence number 12116224; transaction id 11766
+2025-08-18 20:16:44 0 [Note] /usr/bin/mariadbd: Shutdown complete
+
+250818 20:16:44 mysqld_safe mysqld from pid file /var/run/mysqld/mysqld.pid ended
