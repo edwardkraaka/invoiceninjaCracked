@@ -1,0 +1,39 @@
+# MariaDB/MySQL Database files
+mariadb/databases/*
+*.ibd
+*.frm
+*.MYD
+*.MYI
+*.log
+ib_logfile*
+ibdata*
+aria_log*
+
+# Docker volumes
+mariadb/
+mysql/
+redis/
+
+# Environment files with secrets
+.env
+*.env.local
+*.env.production
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+logs/
+*.err
+
+# Temporary files
+*.tmp
+*.temp
