@@ -98,7 +98,12 @@ COPY dockerfiles/debian/php/php-fpm.conf /usr/local/etc/php-fpm.d/invoiceninja.c
 COPY dockerfiles/debian/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Set final permissions and create remaining directories
-RUN mkdir -p public/storage \
+RUN mkdir -p storage/app/public \
+    && mkdir -p storage/framework/sessions \
+    && mkdir -p storage/framework/views \
+    && mkdir -p storage/framework/cache \
+    && mkdir -p storage/framework/testing \
+    && mkdir -p storage/logs \
     && chown -R www-data:www-data /var/www/html \
     && find /var/www/html -type f -exec chmod 644 {} \; \
     && find /var/www/html -type d -exec chmod 755 {} \; \

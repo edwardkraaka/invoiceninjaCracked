@@ -17,6 +17,7 @@
   <script>
     window.__VITE_API_URL__ = '{{ config('app.url') }}';
     window.__VITE_IS_HOSTED__ = 'false';
+    window.__API_URL__ = '{{ config('app.url') }}';
   </script>
 </body>
 

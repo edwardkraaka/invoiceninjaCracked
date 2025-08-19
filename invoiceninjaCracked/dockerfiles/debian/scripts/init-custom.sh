@@ -40,6 +40,16 @@ if [ "$*" = 'supervisord -c /etc/supervisor/conf.d/supervisord.conf' ]; then
         ln -sf /var/www/html/public/react-app/react /var/www/html/public/react
     fi
 
+    # Create storage symlink if it doesn't exist
+    if [ ! -L /var/www/html/public/storage ]; then
+        echo "Creating storage symlink..."
+        rm -rf /var/www/html/public/storage 2>/dev/null || true
+        runuser -u www-data -- php artisan storage:link || {
+            echo "artisan storage:link failed, creating manually..."
+            ln -sf /var/www/html/storage/app/public /var/www/html/public/storage
+        }
+    fi
+
     # Ensure owner, file and directory permissions are correct
     chown -R www-data:www-data \
         /var/www/html/public \
@@ -83,6 +93,11 @@ if [ "$*" = 'supervisord -c /etc/supervisor/conf.d/supervisord.conf' ]; then
 
         echo "Production setup completed"
     fi
+
+    # Clear and rebuild config cache to ensure REACT_URL is properly set
+    echo "Clearing and rebuilding Laravel config cache..."
+    php artisan config:clear
+    php artisan config:cache
 
     echo "Starting supervisord..."
 fi
