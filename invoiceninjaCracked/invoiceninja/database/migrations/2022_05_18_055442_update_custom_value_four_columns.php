@@ -17,75 +17,71 @@ return new class extends Migration {
 
         if (Ninja::isSelfHost()) {
             Schema::table('credits', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('client_contacts', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('clients', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
-            });
-
-            Schema::table('clients', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('documents', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('expenses', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('invoices', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('payments', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('products', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('projects', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('quotes', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('recurring_invoices', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('recurring_quotes', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('recurring_expenses', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('tasks', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('users', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('vendors', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
 
             Schema::table('vendor_contacts', function (Blueprint $table) {
-                $table->text('custom_value4')->change();
+                $table->text('custom_value4')->nullable()->change();
             });
         }
     }
