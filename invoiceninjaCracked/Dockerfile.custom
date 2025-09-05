@@ -33,9 +33,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get install -y --no-install-recommends \
     chromium; \        
     fi \
-    # Install Node.js 20.x (LTS)
-    && curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
-    && apt-get install -y nodejs \
+    # Install Node.js 20.x (LTS) using official binary
+    && curl -fsSL https://nodejs.org/dist/v20.17.0/node-v20.17.0-linux-x64.tar.xz -o node.tar.xz \
+    && tar -xf node.tar.xz -C /usr/local --strip-components=1 \
+    && rm node.tar.xz \
+    # Verify Node.js and npm installation
+    && node --version && npm --version \
     # Create config directory for chromium/google-chrome-stable
     && mkdir /var/www/.config \
     && chown www-data:www-data /var/www/.config \
