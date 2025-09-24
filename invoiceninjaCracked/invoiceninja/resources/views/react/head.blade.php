@@ -1,9 +1,28 @@
 @php
-// Dynamically find the React build files
-$reactFiles = glob(public_path('react-app/react/index-*.js'));
-$cssFiles = glob(public_path('react-app/react/index-*.css'));
-$indexJs = $reactFiles ? basename($reactFiles[0]) : 'index.js';
-$indexCss = $cssFiles ? basename($cssFiles[0]) : 'index.css';
+// Dynamically find the React build files - sort by modification time to get the newest
+$reactPath = public_path('react-app/react');
+$jsFiles = [];
+$cssFiles = [];
+
+if (is_dir($reactPath)) {
+    $files = scandir($reactPath);
+    foreach ($files as $file) {
+        // Look for index-*.js patterns
+        if (preg_match('/^index-.*\.js$/', $file)) {
+            $jsFiles[$file] = filemtime($reactPath . '/' . $file);
+        }
+        if (preg_match('/^index-.*\.css$/', $file)) {
+            $cssFiles[$file] = filemtime($reactPath . '/' . $file);
+        }
+    }
+
+    // Sort by modification time (newest first)
+    arsort($jsFiles);
+    arsort($cssFiles);
+}
+
+$indexJs = $jsFiles ? key($jsFiles) : 'index.js';
+$indexCss = $cssFiles ? key($cssFiles) : 'index.css';
 
 // Find other CSS files
 $monacoFiles = glob(public_path('react-app/react/monaco-editor-*.css'));

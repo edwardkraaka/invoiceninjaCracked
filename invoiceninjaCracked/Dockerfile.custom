@@ -109,48 +109,22 @@ RUN if [ -n "$VITE_API_URL" ]; then \
         npm pkg delete scripts.prepare && \
         npm install --ignore-scripts && \
         npm run build && \
-        rm -rf /var/www/html/public/react-app/react && \
-        mkdir -p /var/www/html/public/react-app/react && \
-        cp -r dist/* /var/www/html/public/react-app/react/ && \
+        # Clean up old React builds before copying new ones
+        rm -rf /var/www/html/public/react-app && \
+        mkdir -p /var/www/html/public/react-app && \
+        cp -r dist/* /var/www/html/public/react-app/ && \
+        # Copy the logo file to the correct location
+        cp public/invoiceninja-logo-dark.png /var/www/html/public/react-app/ && \
+        # Clean up old bundle files to avoid confusion
+        find /var/www/html/public/react-app/react -name "index-*.js" -type f -mtime +1 -delete 2>/dev/null || true && \
+        find /var/www/html/public/react-app/react -name "index-*.css" -type f -mtime +1 -delete 2>/dev/null || true && \
         rm -rf /tmp/ui; \
     else \
         echo "⚠️  VITE_API_URL not provided, using pre-built React assets (may have localhost issues)"; \
     fi
 
-# Create React template and update file references
-RUN if [ -n "$VITE_API_URL" ]; then \
-        BUNDLE_FILE=$(ls /var/www/html/public/react-app/react/bundle.*.js 2>/dev/null | head -n1 | xargs basename 2>/dev/null || echo "bundle.js") && \
-        CSS_FILE=$(ls /var/www/html/public/react-app/react/index-*.css 2>/dev/null | head -n1 | xargs basename 2>/dev/null || echo "index.css") && \
-        echo '<!DOCTYPE html>' > /var/www/html/resources/views/react/index.blade.php && \
-        echo '<html data-report-errors="{{ $report_errors }}" data-rc="{{ $rc }}" data-user-agent="{{ $user_agent }}" data-login="{{ $login }}" lang="en" class="h-full">' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '  <head>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <title>{{ config('\''ninja.app_name'\'') }}</title>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <meta charset="utf-8" />' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <meta name="viewport" content="width=device-width, initial-scale=1" />' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <meta name="theme-color" content="#000000" />' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <meta name="description" content="Leading free invoice generator for freelancers and small businesses." />' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <link rel="stylesheet" href="/react-app/react/rsms/inter.css" />' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <link rel="icon" href="/react-app/react/favicon.ico" />' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <link rel="apple-touch-icon" href="/react-app/react/logo180.png" />' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <link rel="manifest" href="/react-app/react/manifest.json" />' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    @include('\''react.head'\'')' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <script type="module" crossorigin src="/react-app/react/BUNDLE_FILE_PLACEHOLDER"></script>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <link rel="stylesheet" crossorigin href="/react-app/react/CSS_FILE_PLACEHOLDER">' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '  </head>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '  <body class="h-full">' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <noscript>You need to enable JavaScript to run this app.</noscript>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <div id="root"></div>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    <script>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '      window.__VITE_API_URL__ = '\''{{ config('\''app.url'\'') }}'\'';' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '      window.__VITE_IS_HOSTED__ = '\''false'\'';' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '      window.__API_URL__ = '\''{{ config('\''app.url'\'') }}'\'';' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '    </script>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '  </body>' >> /var/www/html/resources/views/react/index.blade.php && \
-        echo '</html>' >> /var/www/html/resources/views/react/index.blade.php && \
-        sed -i "s/BUNDLE_FILE_PLACEHOLDER/$BUNDLE_FILE/g" /var/www/html/resources/views/react/index.blade.php && \
-        sed -i "s/CSS_FILE_PLACEHOLDER/$CSS_FILE/g" /var/www/html/resources/views/react/index.blade.php && \
-        echo "✅ React UI built and deployed successfully with $BUNDLE_FILE and $CSS_FILE"; \
-    fi
+# Blade templates are already in the repository with dynamic bundle loading
+# No need to create them here
 
 # Configure PHP
 RUN ln -s "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
