@@ -100,10 +100,10 @@ COPY invoiceninjaUi/ui /tmp/ui
 RUN if [ -n "$VITE_API_URL" ]; then \
         echo "🚀 Building React UI with API URL: $VITE_API_URL" && \
         cd /tmp/ui && \
-        cp .env.example .env && \
-        sed -i 's/VITE_IS_TEST=true/VITE_IS_TEST=false/' .env && \
-        echo "VITE_API_URL=$VITE_API_URL" >> .env && \
-        echo "VITE_IS_HOSTED=$VITE_IS_HOSTED" >> .env && \
+        # Create .env file directly with required values
+        echo "VITE_API_URL=$VITE_API_URL" > .env && \
+        echo "VITE_IS_HOSTED=${VITE_IS_HOSTED:-false}" >> .env && \
+        echo "VITE_APP_TITLE=\"Invoice Ninja\"" >> .env && \
         echo "VITE_PUSHER_APP_KEY=f0111a02782708da651f" >> .env && \
         cp /var/www/html/vite.config.ts.react ./vite.config.js && \
         npm pkg delete scripts.prepare && \
@@ -114,7 +114,7 @@ RUN if [ -n "$VITE_API_URL" ]; then \
         mkdir -p /var/www/html/public/react-app && \
         cp -r dist/* /var/www/html/public/react-app/ && \
         # Copy the logo file to the correct location
-        cp public/invoiceninja-logo-dark.png /var/www/html/public/react-app/ && \
+        cp public/invoiceninja-logo-dark.png /var/www/html/public/react-app/ 2>/dev/null || true && \
         # Clean up old bundle files to avoid confusion
         find /var/www/html/public/react-app/react -name "index-*.js" -type f -mtime +1 -delete 2>/dev/null || true && \
         find /var/www/html/public/react-app/react -name "index-*.css" -type f -mtime +1 -delete 2>/dev/null || true && \
