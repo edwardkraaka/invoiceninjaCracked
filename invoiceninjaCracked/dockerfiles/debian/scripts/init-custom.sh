@@ -34,16 +34,33 @@ if [ "$*" = 'supervisord -c /etc/supervisor/conf.d/supervisord.conf' ]; then
     fi
     echo "Public Folder is up to date"
 
-    # Create symlink for React assets if it doesn't exist
-    if [ ! -L /var/www/html/public/react ]; then
+    # Clean up old React bundle files to prevent conflicts
+    echo "Cleaning up old React bundle files..."
+    if [ -d /var/www/html/public/react-app/react ]; then
+        # Keep only the newest index-*.js and index-*.css files
+        cd /var/www/html/public/react-app/react
+        # Find all index-*.js files, sort by time, keep newest, delete rest
+        ls -t index-*.js 2>/dev/null | tail -n +2 | xargs -r rm -f
+        ls -t index-*.css 2>/dev/null | tail -n +2 | xargs -r rm -f
+        cd - > /dev/null
+    fi
+
+    # Create symlink for React assets if it doesn't exist or is broken
+    if [ ! -e /var/www/html/public/react ]; then
         echo "Creating symlink for React assets..."
+        rm -f /var/www/html/public/react 2>/dev/null
         ln -sf /var/www/html/public/react-app/react /var/www/html/public/react
     fi
 
-    # Create symlink for TinyMCE assets if it doesn't exist
-    if [ ! -L /var/www/html/public/tinymce_6.4.2 ]; then
-        echo "Creating symlink for TinyMCE assets..."
-        ln -sf /var/www/html/public/react-app/tinymce_6.4.2 /var/www/html/public/tinymce_6.4.2
+    # Create symlink for TinyMCE assets - verify target exists first
+    if [ -d /var/www/html/public/react-app/tinymce_6.4.2 ]; then
+        if [ ! -e /var/www/html/public/tinymce_6.4.2 ]; then
+            echo "Creating symlink for TinyMCE assets..."
+            rm -f /var/www/html/public/tinymce_6.4.2 2>/dev/null
+            ln -sf /var/www/html/public/react-app/tinymce_6.4.2 /var/www/html/public/tinymce_6.4.2
+        fi
+    else
+        echo "WARNING: TinyMCE directory not found at /var/www/html/public/react-app/tinymce_6.4.2"
     fi
 
     # Create storage symlink if it doesn't exist

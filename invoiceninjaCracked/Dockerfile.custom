@@ -109,15 +109,14 @@ RUN if [ -n "$VITE_API_URL" ]; then \
         npm pkg delete scripts.prepare && \
         npm install --ignore-scripts && \
         npm run build && \
-        # Clean up old React builds before copying new ones
+        # Clean up ALL old React builds before copying new ones
         rm -rf /var/www/html/public/react-app && \
         mkdir -p /var/www/html/public/react-app && \
         cp -r dist/* /var/www/html/public/react-app/ && \
         # Copy the logo file to the correct location
         cp public/invoiceninja-logo-dark.png /var/www/html/public/react-app/ 2>/dev/null || true && \
-        # Clean up old bundle files to avoid confusion
-        find /var/www/html/public/react-app/react -name "index-*.js" -type f -mtime +1 -delete 2>/dev/null || true && \
-        find /var/www/html/public/react-app/react -name "index-*.css" -type f -mtime +1 -delete 2>/dev/null || true && \
+        # Verify TinyMCE was copied to correct location
+        test -d /var/www/html/public/react-app/tinymce_6.4.2 || echo "Warning: TinyMCE directory not found after build" && \
         rm -rf /tmp/ui; \
     else \
         echo "⚠️  VITE_API_URL not provided, using pre-built React assets (may have localhost issues)"; \
