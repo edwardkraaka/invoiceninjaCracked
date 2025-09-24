@@ -43,7 +43,7 @@ if [ "$*" = 'supervisord -c /etc/supervisor/conf.d/supervisord.conf' ]; then
     # Create symlink for TinyMCE assets if it doesn't exist
     if [ ! -L /var/www/html/public/tinymce_6.4.2 ]; then
         echo "Creating symlink for TinyMCE assets..."
-        ln -sf /var/www/html/public/react-app/react/tinymce_6.4.2 /var/www/html/public/tinymce_6.4.2
+        ln -sf /var/www/html/public/react-app/tinymce_6.4.2 /var/www/html/public/tinymce_6.4.2
     fi
 
     # Create storage symlink if it doesn't exist
