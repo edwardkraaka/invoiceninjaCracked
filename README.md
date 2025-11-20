@@ -23,13 +23,13 @@ cd invoiceninja
 Copy the example environment file and configure it:
 
 ```bash
-cp .env.example .env
+cp env.example .env
 ```
 
 Edit `.env` and set the following critical values:
 
 ```env
-# Application URL (MUST match your domain)
+# Application URL (MUST match your domain - this is the ONLY place you need to set it)
 APP_URL=https://your-domain.com
 
 # Database credentials
@@ -46,19 +46,9 @@ IN_PASSWORD=your_admin_password
 APP_KEY=base64:your_generated_key_here
 ```
 
-### 3. Update Docker Compose Configuration
+**IMPORTANT:** The `APP_URL` in your `.env` file is automatically used by both the backend API and the React UI. You do NOT need to edit `docker-compose.yml`.
 
-Edit `docker-compose.yml` and update the build arguments:
-
-```yaml
-invoiceninja:
-  build:
-    args:
-      VITE_API_URL: https://your-domain.com  # MUST match APP_URL
-      VITE_IS_HOSTED: false
-```
-
-### 4. Build and Deploy
+### 3. Build and Deploy
 
 ```bash
 # Build the custom Invoice Ninja image
@@ -105,12 +95,14 @@ The first deployment will:
 
 ### Issue: Authentication fails with "These credentials do not match our records"
 
-**Cause**: React UI built with wrong API URL
+**Cause**: React UI is trying to connect to the wrong API URL
 
 **Solution**:
-1. Check VITE_API_URL in docker-compose.yml matches your domain
-2. Rebuild: `docker compose build --no-cache invoiceninja`
+1. Verify `APP_URL` in your `.env` file matches your actual domain/URL
+2. Rebuild the container: `docker compose build --no-cache invoiceninja`
 3. Restart: `docker compose up -d`
+
+**Note**: The React UI now automatically uses the `APP_URL` from your `.env` file at runtime. You don't need to edit any Docker configuration files.
 
 ### Issue: TinyMCE editor shows blank/not loading
 

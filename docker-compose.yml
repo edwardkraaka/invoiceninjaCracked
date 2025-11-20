@@ -21,7 +21,6 @@ services:
       dockerfile: Dockerfile.custom
       args:
         PHP: 8.3
-        VITE_API_URL: https://invoicing.goodwings.org
         VITE_IS_HOSTED: false
     # image: invoiceninja/invoiceninja-bypassed:latest  # Commented out - using local build instead
     container_name: invoiceninja

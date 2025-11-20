@@ -33,8 +33,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-get install -y --no-install-recommends \
     chromium; \        
     fi \
-    # Install Node.js 20.x (LTS) using official binary
-    && curl -fsSL https://nodejs.org/dist/v20.17.0/node-v20.17.0-linux-x64.tar.xz -o node.tar.xz \
+    # Install Node.js 20.x (LTS) using official binary (architecture-aware)
+    && ARCH="$(dpkg --print-architecture)" \
+    && if [ "$ARCH" = "amd64" ]; then NODE_ARCH="x64"; elif [ "$ARCH" = "arm64" ]; then NODE_ARCH="arm64"; fi \
+    && curl -fsSL https://nodejs.org/dist/v20.17.0/node-v20.17.0-linux-${NODE_ARCH}.tar.xz -o node.tar.xz \
     && tar -xf node.tar.xz -C /usr/local --strip-components=1 \
     && rm node.tar.xz \
     # Verify Node.js and npm installation
@@ -90,37 +92,31 @@ RUN npm install && \
     # Ensure build directory exists
     test -d public/build || (echo "ERROR: Vite build failed!" && exit 1)
 
-# Build React UI with correct API URL
-ARG VITE_API_URL
+# Build React UI with runtime API URL configuration
 ARG VITE_IS_HOSTED=false
 
 # Copy UI repository and build with environment-specific configuration
 COPY invoiceninjaUi/ui /tmp/ui
-# Build React UI with environment-specific configuration
-RUN if [ -n "$VITE_API_URL" ]; then \
-        echo "🚀 Building React UI with API URL: $VITE_API_URL" && \
-        cd /tmp/ui && \
-        # Create .env file directly with required values
-        echo "VITE_API_URL=$VITE_API_URL" > .env && \
-        echo "VITE_IS_HOSTED=${VITE_IS_HOSTED:-false}" >> .env && \
-        echo "VITE_APP_TITLE=\"Invoice Ninja\"" >> .env && \
-        echo "VITE_PUSHER_APP_KEY=f0111a02782708da651f" >> .env && \
-        cp /var/www/html/vite.config.ts.react ./vite.config.js && \
-        npm pkg delete scripts.prepare && \
-        npm install --ignore-scripts && \
-        npm run build && \
-        # Clean up ALL old React builds before copying new ones
-        rm -rf /var/www/html/public/react-app && \
-        mkdir -p /var/www/html/public/react-app && \
-        cp -r dist/* /var/www/html/public/react-app/ && \
-        # Copy the logo file to the correct location
-        cp public/invoiceninja-logo-dark.png /var/www/html/public/react-app/ 2>/dev/null || true && \
-        # Verify TinyMCE was copied to correct location
-        test -d /var/www/html/public/react-app/tinymce_6.4.2 || echo "Warning: TinyMCE directory not found after build" && \
-        rm -rf /tmp/ui; \
-    else \
-        echo "⚠️  VITE_API_URL not provided, using pre-built React assets (may have localhost issues)"; \
-    fi
+# Build React UI without baked-in API URL - will use runtime configuration from .env
+RUN echo "🚀 Building React UI for runtime configuration" && \
+    cd /tmp/ui && \
+    # Create .env with only necessary values, NO VITE_API_URL (will use runtime injection)
+    echo "VITE_IS_HOSTED=${VITE_IS_HOSTED:-false}" > .env && \
+    echo "VITE_APP_TITLE=\"Invoice Ninja\"" >> .env && \
+    echo "VITE_PUSHER_APP_KEY=f0111a02782708da651f" >> .env && \
+    cp /var/www/html/vite.config.ts.react ./vite.config.js && \
+    npm pkg delete scripts.prepare && \
+    npm install --ignore-scripts && \
+    npm run build && \
+    # Clean up ALL old React builds before copying new ones
+    rm -rf /var/www/html/public/react-app && \
+    mkdir -p /var/www/html/public/react-app && \
+    cp -r dist/* /var/www/html/public/react-app/ && \
+    # Copy the logo file to the correct location
+    cp public/invoiceninja-logo-dark.png /var/www/html/public/react-app/ 2>/dev/null || true && \
+    # Verify TinyMCE was copied to correct location
+    test -d /var/www/html/public/react-app/tinymce_6.4.2 || echo "Warning: TinyMCE directory not found after build" && \
+    rm -rf /tmp/ui
 
 # Blade templates are already in the repository with dynamic bundle loading
 # No need to create them here
